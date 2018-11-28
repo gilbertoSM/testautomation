@@ -20,26 +20,22 @@ pipeline {
      )
    )
   }
-
-  stages {
-    stage('Clean') {
-      steps {
-        sh 'mvn clean'
-      }
+  
+  
+  stage('Execute Tests') {
+        def os = System.properties['os.name'].toLowerCase()
+         echo "OS: ${os}"
+        if (os.contains("linux")) {
+             sh '''mvn clean
+            mvn validate
+         mvn compile''' 
+        } else {
+            bat '''mvn clean
+            mvn validate
+            mvn compile'''
     }
-    stage('Validate') {
-      steps {
-        sh 'mvn validate'
-      }
     }
-    stage('Tests') {
-      steps {
-        timeout(time: 5, unit: 'MINUTES') {
-            sh 'mvn compile'
-        }
-      }
-    }
-  }
+  
 
   post {
     always {
