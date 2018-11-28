@@ -21,21 +21,21 @@ pipeline {
    )
   }
   
-  
+  stages {
   stage('Execute Tests') {
         def os = System.properties['os.name'].toLowerCase()
          echo "OS: ${os}"
         if (os.contains("linux")) {
-             sh '''mvn clean
+             steps{sh '''mvn clean
             mvn validate
-         mvn compile''' 
+         mvn compile'''} 
         } else {
-            bat '''mvn clean
+            steps{bat '''mvn clean
             mvn validate
-            mvn compile'''
+            mvn compile'''}
     }
     }
-  
+  }
 
   post {
     always {
