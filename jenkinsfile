@@ -1,5 +1,15 @@
+def deployEnvironments = ['Staging', 'Production'].join('\n')
+
 pipeline {
     agent any
+  
+    parameters {
+    choice(
+        name: 'Environment',
+        choices: deployEnvironments,
+        description: 'Which environment to test?',
+    )
+  }
 
     stages {
         stage('Build') {
@@ -32,10 +42,6 @@ pipeline {
                 bat'''mvn test'''
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
+        
     }
 }
