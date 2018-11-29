@@ -1,41 +1,21 @@
-properties([pipelineTriggers([[$class: 'BitBucketTrigger']])])
-def deployEnvironments = ['Staging', 'Production'].join('\n')
-
 pipeline {
-  agent any
+    agent any
 
-  parameters {
-    choice(
-        name: 'Environment',
-        choices: deployEnvironments,
-        description: 'Which environment to test?',
-    )
-  }
-
-  options {
-    buildDiscarder(
-     logRotator(
-       daysToKeepStr: '7',
-       numToKeepStr: '10'
-     )
-   )
-  }
-  
-  stages {
-  stage('Execute Tests') {
-        def os = System.properties['os.name'].toLowerCase()
-         echo "OS: ${os}"
-        if (os.contains("linux")) {
-             steps{sh '''mvn clean
-            mvn validate
-         mvn compile'''} 
-        } else {
-            steps{bat '''mvn clean
-            mvn validate
-            mvn compile'''}
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building..'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
     }
-    }
-  }
-}
-
 }
