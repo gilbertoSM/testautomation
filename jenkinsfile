@@ -36,7 +36,8 @@ pipeline {
             }
         }
         
-        stage('Test') {
+        stage('Test') 
+        {
             steps {
                 echo 'Testing..'
                 bat'''mvn test'''
@@ -44,39 +45,3 @@ pipeline {
         }
     }
     
-    post {
-    always {
-      publishHtmlReports()
-    }
-    aborted {
-      slackNotify("Aborted")
-    }
-    success {
-      slackNotify("Success")
-    }
-    failure {
-      slackNotify("Failure")
-    }
-  }
-  
-  def slackNotify(type, message=null, channels=['backendjenkins']) {
-  color = "#8c8c8c"
-  if (type == "Success") {
-    color = "#36a64f"
-  } else if (type == "Failure") {
-    color = "#d00000"
-  }
-
-  def slackMsg = message;
-  if (message == null) {
-    slackMsg = "Automation Test » ${env.GIT_BRANCH} - #${env.BUILD_NUMBER} ${type} (<${env.BUILD_URL}|Open>)";
-  }
-
-  channels.each {
-    slackSend(
-      color: "${color}", botUser: true, channel: "${it}",
-      message: slackMsg
-    )
-  }
-}
-}
