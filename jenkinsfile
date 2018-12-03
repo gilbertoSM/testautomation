@@ -1,6 +1,5 @@
 def deployEnvironments = ['Staging', 'Production'].join('\n')
-
-pipeline {
+ pipeline {
     agent any
   
     parameters {
@@ -10,38 +9,42 @@ pipeline {
         description: 'Which environment to test?',
     )
   }
-
-    stages {
+     stages {
         stage('Build') {
-            steps {
-                echo 'Building..'
-            }
-        }
-        stage('Clean'){
-            steps {
-                echo 'Clean...'
-                bat '''mvn clean'''
-            }
-        }
-        stage('Validate')
-        {
-            steps{
-            bat '''mvn validate'''
-            }
-        }
-        stage('Compile')
-        {
-            steps{
-            bat'''mvn compile'''
-            }
-        }
-        
-        stage('Test') 
-        {
-            steps {
-                echo 'Testing..'
+             steps {
+                 echo 'Building..'
+             }
+         }
+         stage('Clean'){
+             steps {
+                 echo 'Clean...'
+                 bat '''mvn clean'''
+             }
+         }
+         stage('Validate')
+         {
+             steps{
+             bat '''mvn validate'''
+             }
+         }
+         stage('Compile')
+         {
+             steps{
+             bat'''mvn compile'''
+             }
+         }
+         
+         stage('Test') {
+             steps {
+                 echo 'Testing..'
                 bat'''mvn test'''
             }
         }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+        
     }
-    
+}
