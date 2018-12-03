@@ -40,11 +40,6 @@ def deployEnvironments = ['Staging', 'Production'].join('\n')
                 bat'''mvn test'''
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
         
     }
 }
