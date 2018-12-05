@@ -44,9 +44,7 @@ def deployEnvironments = ['Staging', 'Production'].join('\n')
     }
     
     post {
-    always {
-      publishHtmlReports()
-    }
+ 
     aborted {
       slackNotify("Aborted")
     }
