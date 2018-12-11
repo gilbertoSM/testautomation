@@ -10,11 +10,7 @@ def deployEnvironments = ['Staging', 'Production'].join('\n')
     )
   }
      stages {
-        stage('Build') {
-             steps {
-                 echo 'Building..'
-             }
-         }
+       
          stage('Clean'){
              steps {
                  echo 'Clean...'
@@ -43,36 +39,5 @@ def deployEnvironments = ['Staging', 'Production'].join('\n')
         
     }
     
-    post {
- 
-    aborted {
-      slackNotify("Aborted")
-    }
-    success {
-      slackNotify("Success")
-    }
-    failure {
-      slackNotify("Failure")
-    }
-  }
 }
-def slackNotify(type, message=null, channels=['backendjenkins']) {
-  color = "#8c8c8c"
-  if (type == "Success") {
-    color = "#36a64f"
-  } else if (type == "Failure") {
-    color = "#d00000"
-  }
-
-  def slackMsg = message;
-  if (message == null) {
-    slackMsg = "Automation Test » ${env.GIT_BRANCH} - #${env.BUILD_NUMBER} ${type} (<${env.BUILD_URL}|Open>)";
-  }
-
-  channels.each {
-    slackSend(
-      color: "${color}", botUser: true, channel: "${it}",
-      message: slackMsg
-    )
-  }
 }
